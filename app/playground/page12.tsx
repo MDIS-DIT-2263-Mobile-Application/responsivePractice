@@ -1,43 +1,97 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
 export default function PlaygroundPage12() {
   const [value, setValue] = useState('');
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
+  // adapt some measurements based on current window size
+  const bigBlockHeight = Math.min(240, width * 0.3);
 
   return (
     <View style={styles.page}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Responsive Playground - Page 12</Text>
-        <Text style={styles.paragraph}>
-          This variant stacks huge blocks with fixed heights and no scrolling, ensuring that lower controls fall beyond
-          the viewport on smaller phones.
-        </Text>
-        <View style={styles.bigBlock} />
-        <TextInput style={styles.input} value={value} onChangeText={setValue} placeholder="Role" />
-        <View style={styles.rowButtons}>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Button A</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Button B</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Button C</Text></TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={[styles.container, { maxWidth: Math.min(width - 32, 900) }]}>      
+          <Text style={styles.title}>Responsive Playground - Page 12</Text>
+          <Text style={styles.paragraph}>
+            This variant stacks huge blocks with fixed heights and no scrolling, ensuring that lower controls fall beyond
+            the viewport on smaller phones.
+          </Text>
+          <View style={[styles.bigBlock, { height: bigBlockHeight }]} />
+          <TextInput
+            style={styles.input}
+            value={value}
+            onChangeText={setValue}
+            placeholder="Role"
+          />
+          <View
+            style={[
+              styles.rowButtons,
+              isLandscape ? styles.rowLandscape : styles.rowPortrait,
+            ]}
+          >
+            <TouchableOpacity style={[styles.button, isLandscape && styles.buttonLandscape]}>
+              <Text style={styles.buttonText}>Button A</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, isLandscape && styles.buttonLandscape]}>
+              <Text style={styles.buttonText}>Button B</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, isLandscape && styles.buttonLandscape]}>
+              <Text style={styles.buttonText}>Button C</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      {/* STUDENT TASK:
-          Fix this page to become responsive.
-          Remove fixed widths.
-          Handle overflow.
-          Add ScrollView if necessary.
-          Improve layout for portrait & landscape. */}
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: '#fef3c7' },
-  container: { width: 900, backgroundColor: '#fde68a', padding: 22, height: 760 },
-  title: { fontSize: 43, fontWeight: '800', marginBottom: 12 },
-  paragraph: { fontSize: 30, lineHeight: 42, marginBottom: 14 },
-  bigBlock: { width: 850, height: 240, backgroundColor: '#f59e0b', marginBottom: 16 },
-  input: { width: 600, height: 88, borderWidth: 2, fontSize: 29, backgroundColor: '#fff', paddingHorizontal: 12, marginBottom: 14 },
-  rowButtons: { flexDirection: 'row' },
-  button: { width: 270, height: 86, backgroundColor: '#b45309', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-  buttonText: { color: '#fff', fontSize: 26, fontWeight: '700' },
+  scrollContainer: { flexGrow: 1, padding: 16 },
+  container: {
+    alignSelf: 'center',
+    width: '100%',
+    backgroundColor: '#fde68a',
+    padding: 22,
+  },
+  title: { fontSize: 32, fontWeight: '800', marginBottom: 12 },
+  paragraph: { fontSize: 20, lineHeight: 28, marginBottom: 14 },
+  bigBlock: { width: '100%', backgroundColor: '#f59e0b', marginBottom: 16 },
+  input: {
+    width: '100%',
+    maxWidth: 600,
+    height: 88,
+    borderWidth: 2,
+    fontSize: 20,
+    backgroundColor: '#fff',
+    paddingHorizontal: 12,
+    marginBottom: 14,
+  },
+  rowButtons: {
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  rowPortrait: {
+    flexDirection: 'column',
+  },
+  rowLandscape: {
+    flexDirection: 'row',
+  },
+  button: {
+    flex: 1,
+    minWidth: 100,
+    height: 86,
+    backgroundColor: '#b45309',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  buttonLandscape: {
+    marginRight: 12,
+    marginBottom: 0,
+  },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
 });
