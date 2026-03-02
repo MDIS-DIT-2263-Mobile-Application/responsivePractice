@@ -1,41 +1,123 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-export default function PlaygroundPage1() {
+const { width } = Dimensions.get('window');
+
+export default function PlaygroundPage1({ navigation }) {
   const [value, setValue] = useState('');
 
+  // Submit -> 弹框
+  const handleSubmit = () => {
+    Alert.alert('Thank you for your answers');
+  };
+
+  // Cancel -> 清空输入框
+  const handleCancel = () => {
+    setValue('');
+  };
+
+  // Draft -> 保留输入框内容，返回主界面
+  const handleDraft = () => {
+    if (navigation) {
+      navigation.goBack();
+    } else {
+      Alert.alert('Draft saved, returning to main screen');
+    }
+  };
+
   return (
-    <View style={styles.page}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Responsive Playground - Page 1</Text>
-        <Text style={styles.paragraph}>
-          This tablet-only screen intentionally keeps a fixed 900 width layout with large text and long content so
-          that smartphone portrait mode clearly breaks and overflows in multiple places for repair practice.
-        </Text>
-        <TextInput style={styles.input} value={value} onChangeText={setValue} placeholder="Enter text" />
-        <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Button A</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Button B</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Button C</Text></TouchableOpacity>
+    <SafeAreaView style={styles.page}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Text style={[styles.title, { fontSize: width * 0.06 }]}>
+            Share Your Thoughts
+          </Text>
+          <Text style={[styles.paragraph, { fontSize: width * 0.04, lineHeight: width * 0.06 }]}>
+            Do you feel happy in your life?
+          </Text>
+
+          <TextInput
+            style={[styles.input, { height: width * 0.12, fontSize: width * 0.04 }]}
+            value={value}
+            onChangeText={setValue}
+            placeholder="Enter Your Answers"
+          />
+
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={[styles.buttonText, { fontSize: width * 0.04 }]}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleCancel}>
+              <Text style={[styles.buttonText, { fontSize: width * 0.04 }]}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleDraft}>
+              <Text style={[styles.buttonText, { fontSize: width * 0.04 }]}>Draft</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      {/* STUDENT TASK:
-          Fix this page to become responsive.
-          Remove fixed widths.
-          Handle overflow.
-          Add ScrollView if necessary.
-          Improve layout for portrait & landscape. */}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: '#ffe7d6' },
-  container: { width: 900, padding: 30, backgroundColor: '#ffd4b2' },
-  title: { fontSize: 42, fontWeight: '800', marginBottom: 20 },
-  paragraph: { fontSize: 30, lineHeight: 40, marginBottom: 20 },
-  input: { width: 560, height: 85, fontSize: 28, borderWidth: 2, paddingHorizontal: 16, backgroundColor: '#fff', marginBottom: 20 },
-  buttonRow: { flexDirection: 'row', gap: 16 },
-  button: { width: 250, height: 90, backgroundColor: '#9a3412', justifyContent: 'center', alignItems: 'center' },
-  buttonText: { fontSize: 26, color: '#fff', fontWeight: '700' },
+  page: {
+    flex: 1,
+    backgroundColor: '#ffe7d6',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  container: {
+    width: '95%',
+    maxWidth: 450,
+    padding: 16,
+    backgroundColor: '#ffd4b2',
+    borderRadius: 12,
+  },
+  title: {
+    fontWeight: '800',
+    marginBottom: 12,
+  },
+  paragraph: {
+    marginBottom: 12,
+  },
+  input: {
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+    marginBottom: 12,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    flex: 1,
+    height: 45,
+    backgroundColor: '#9a3412',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 4,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '700',
+  },
 });
