@@ -1,6 +1,17 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
+/**
+ * ResponsiveDemoScreen is a React Native functional component that demonstrates responsive layout techniques.
+ *
+ * - Uses `useWindowDimensions` to detect device orientation (portrait or landscape).
+ * - Displays a header indicating the current layout mode.
+ * - Shows two content cards that stack vertically in portrait mode and align horizontally in landscape mode.
+ * - Renders a section of action buttons, which also adjust their layout based on orientation.
+ * - Utilizes flexbox and conditional styling to ensure UI adapts smoothly to different screen sizes and orientations.
+ *
+ * This component is useful for teaching or practicing responsive design in mobile applications.
+ */
 export default function ResponsiveDemoScreen() {
   const { width, height } = useWindowDimensions();
   const isPortrait = height >= width;
